@@ -34,12 +34,13 @@ while ( initial_balance > 0){
     printf ("Enter amount you want to wager: $");
     wager = get_wager_amount (initial_balance);
 
-    printf ("Rolling the dice...\n");
+    printf ("Rolling dice...\n");
     die_roll1 = roll_dice();
-    die_roll2 = roll_dice();
-
     printf ("Roll Dice #1: %d\n", die_roll1);
+    printf ("Rolling dice...\n");
+    die_roll2 = roll_dice();
     printf ("Roll Dice #2: %d\n", die_roll2);
+
     sum_of_roll = calcluate_sum_dice(die_roll1, die_roll2);
     printf ("Sum of rolls: %d\n", sum_of_roll);
 
@@ -50,11 +51,11 @@ while ( initial_balance > 0){
     if ( point > 0)
         while ( add_subtract == -1 )
         {
-            printf ("Rolling the dice...\n");
+            printf ("Rolling dice...\n");
             die_roll1 = roll_dice();
-            die_roll2 = roll_dice();
-
             printf ("Roll Dice #1: %d\n", die_roll1);
+            printf ("Rolling dice...\n");
+            die_roll2 = roll_dice();
             printf ("Roll Dice #2: %d\n", die_roll2);
             sum_of_roll = calcluate_sum_dice(die_roll1, die_roll2);
             printf ("Sum of rolls: %d\n", sum_of_roll);
@@ -63,29 +64,17 @@ while ( initial_balance > 0){
             initial_balance = adjust_bank_balance (initial_balance, wager, add_subtract);
         }
     else
-    {
-        while ( add_subtract != 0 || add_subtract != 1 )
-        {
-            printf ("Rolling the dice...\n");
-            die_roll1 = roll_dice();
-            die_roll2 = roll_dice();
-
-            printf ("Roll Dice #1: %d\n", die_roll1);
-            printf ("Roll Dice #2: %d\n", die_roll2);
-            sum_of_roll = calcluate_sum_dice(die_roll1, die_roll2);
-            printf ("Sum of rolls: %d\n", sum_of_roll);
-
-            add_subtract = initial_check_loss_or_win (sum_of_roll);
             initial_balance =  adjust_bank_balance (initial_balance, wager, add_subtract);
-        }
     }
-}
-
-
-
 
     return 0;
 }
+
+
+
+
+
+
 
 void print_game_rules (void)
 {
@@ -97,7 +86,7 @@ void print_game_rules (void)
     printf ("If the sum is 4, 5, 6, 8, 9 or 10 on the first throw, then that sume becomes the players point.\n");
     printf ("To win, they must keep rolling the dice until they make their point. The player loses if they roll a 7 before making their point.\n\n\n");
 
-    printf ("Please press space and then enter to continue...");
+    printf ("Please press space and then enter to continue...\a");
     scanf ("%c", &space);
     if (space == ' ') {
         printf ("\n");
@@ -152,7 +141,7 @@ int roll_dice (void)
 {
     int result;
 
-    sleep (1);
+    sleep(2);
     srand(time(0));
     result = (rand() % 6) + 1;
 
@@ -206,13 +195,14 @@ int succesive_loss_or_neither (int sum, int point)
         printf ("You lose!\n");
         return 0;
     }
-    else if ( sum == 0)
+    else if ( sum == point)
     {
         printf ("You win!\n");
         return 1;
     }
     else
     {
+        printf ("%d is your point.", point);
         printf ("Keep rolling!\n");
         return -1;
     }
@@ -234,9 +224,13 @@ double adjust_bank_balance ( double balance, double wager, int add_subtract )
             printf ("$%.2f - $%.2f = $%.2f\n", balance, wager, new_balance);
             break;
 
-        default:
+        case -1:
             printf ("Your balance is the same: $%.2f\n", balance);
             return balance;
+
+        default:
+            break;
+
     }
 
 
